@@ -3,9 +3,15 @@ package com.example.jponline_backend.controller;
 import com.example.jponline_backend.services.UserServices;
 import com.example.jponline_backend.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.example.jponline_backend.models.User;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -14,6 +20,8 @@ import com.example.jponline_backend.models.User;
 public class UserController {
   @Autowired
   private UserServices userServices;
+  @Autowired
+  private UserRepository userRepository;
 
   @GetMapping("/users")
   public List<User> getUsers() {
@@ -41,6 +49,30 @@ public class UserController {
     } else {
       return ResponseEntity.status(401).body("Email ou senha inválidos");
     }
+  }
+
+  // Endpoint para atualizar os likes e dislikes do usuário
+  @PatchMapping("/users/{userId}")
+  public ResponseEntity<User> updateUserLikesDislikes(@PathVariable String userId, @RequestBody Map<String, List<String>> updateData) {
+    User user = userRepository.findById(userId).orElse(null);
+    if (user == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    List<String> likedPosts = updateData.get("likedPosts");
+    List<String> dislikedPosts = updateData.get("dislikedPosts");
+
+
+    // Atualiza as tabelas de relacionamento liked_posts e disliked_posts
+    if (likedPosts != null) {
+      userServices.updateLikedPosts(userId, likedPosts);
+    }
+    if (dislikedPosts != null) {
+      userServices.updateDislikedPosts(userId, dislikedPosts);
+    }
+
+    // Retorna o usuário atualizado
+    return ResponseEntity.ok(user);
   }
 
 }

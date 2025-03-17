@@ -24,16 +24,16 @@ public class User {
   @ManyToMany
   @JoinTable(
           name = "liked_posts",
-          joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "post_id")
+          joinColumns = @JoinColumn(name = "userId"),
+          inverseJoinColumns = @JoinColumn(name = "postId")
   )
   private List<Post> likedPosts;
 
   @ManyToMany
   @JoinTable(
           name = "disliked_posts",
-          joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "post_id")
+          joinColumns = @JoinColumn(name = "userId"),
+          inverseJoinColumns = @JoinColumn(name = "postId")
   )
   private List<Post> dislikedPosts;
 
