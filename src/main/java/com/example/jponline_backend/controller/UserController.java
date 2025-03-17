@@ -20,5 +20,27 @@ public class UserController {
     return this.userServices.getUsers();
   }
 
+  // Endpoint para verificar se o email já está registrado
+  @GetMapping("/checkEmail")
+  public boolean checkEmail(@RequestParam String email) {
+    return userServices.isEmailRegistered(email);
+  }
+
+  // Endpoint para registrar um novo usuário
+  @PostMapping("/users")
+  public User registerUser(@RequestBody User user) {
+    return userServices.registerUser(user);
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
+    User user = userServices.findByEmail(loginUser.getEmail());
+
+    if (user != null && user.getPassword().equals(loginUser.getPassword())) {
+      return ResponseEntity.ok(user);
+    } else {
+      return ResponseEntity.status(401).body("Email ou senha inválidos");
+    }
+  }
 
 }

@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("SELECT u FROM User u where u.email LIKE 'leaosilas@gmail.com'")
   public List<User> getUserTest();
 
+  // Metodo customizado para buscar um usuário pelo email
+  Optional<User> findByEmail(String email);
+
 }

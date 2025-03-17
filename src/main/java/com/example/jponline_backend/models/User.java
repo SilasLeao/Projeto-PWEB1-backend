@@ -2,13 +2,15 @@ package com.example.jponline_backend.models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class User {
 
   @Id
-  private String id;
+  private String id = UUID.randomUUID().toString();
+
 
   @Column(nullable = false, unique = true)
   private String username;
