@@ -8,7 +8,6 @@ import java.util.List;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID) // Gerar ID no formato UUID
   private String id;
 
   @Column(nullable = false, unique = true)
@@ -20,16 +19,26 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @ElementCollection
-  private List<String> likedPosts;
+  @ManyToMany
+  @JoinTable(
+          name = "liked_posts",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "post_id")
+  )
+  private List<Post> likedPosts;
 
-  @ElementCollection
-  private List<String> dislikedPosts;
+  @ManyToMany
+  @JoinTable(
+          name = "disliked_posts",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "post_id")
+  )
+  private List<Post> dislikedPosts;
 
   // Construtores
   public User() {}
 
-  public User(String username, String email, String password, List<String> likedPosts, List<String> dislikedPosts) {
+  public User(String username, String email, String password, List<Post> likedPosts, List<Post> dislikedPosts) {
     this.username = username;
     this.email = email;
     this.password = password;
@@ -70,19 +79,19 @@ public class User {
     this.password = password;
   }
 
-  public List<String> getLikedPosts() {
+  public List<Post> getLikedPosts() {
     return likedPosts;
   }
 
-  public void setLikedPosts(List<String> likedPosts) {
+  public void setLikedPosts(List<Post> likedPosts) {
     this.likedPosts = likedPosts;
   }
 
-  public List<String> getDislikedPosts() {
+  public List<Post> getDislikedPosts() {
     return dislikedPosts;
   }
 
-  public void setDislikedPosts(List<String> dislikedPosts) {
+  public void setDislikedPosts(List<Post> dislikedPosts) {
     this.dislikedPosts = dislikedPosts;
   }
 }

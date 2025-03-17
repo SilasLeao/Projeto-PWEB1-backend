@@ -1,5 +1,6 @@
 package com.example.jponline_backend.controller;
 
+import com.example.jponline_backend.services.UserServices;
 import com.example.jponline_backend.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,15 +10,15 @@ import com.example.jponline_backend.models.User;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/")
 public class UserController {
   @Autowired
-  private UserRepository userRepository;
+  private UserServices userServices;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable Long id) {
-    return userRepository.findById(id)
-      .map(ResponseEntity::ok)
-      .orElse(ResponseEntity.notFound().build());
+  @GetMapping("/users")
+  public List<User> getUsers() {
+    return this.userServices.getUsers();
   }
+
+
 }
