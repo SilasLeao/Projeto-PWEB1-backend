@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +25,11 @@ public class UserController {
   @GetMapping("/users")
   public List<User> getUsers() {
     return this.userServices.getUsers();
+  }
+
+  @GetMapping("/users/{userId}")
+  public Optional<User> getUserById(@PathVariable String userId) {
+    return this.userServices.findById(userId);
   }
 
   // Endpoint para verificar se o email já está registrado
@@ -52,12 +56,14 @@ public class UserController {
   }
 
   // Endpoint para atualizar os likes e dislikes do usuário
-  @PatchMapping("/users/{userId}")
-  public ResponseEntity<User> updateUserLikesDislikes(@PathVariable String userId, @RequestBody Map<String, List<String>> updateData) {
+  @PatchMapping("/users/{userId}/news")
+  public ResponseEntity<User> updateUserLikesDislikesPosts(@PathVariable String userId, @RequestBody Map<String, List<String>> updateData) {
     User user = userRepository.findById(userId).orElse(null);
     if (user == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+
+    System.out.println(updateData);
 
     List<String> likedPosts = updateData.get("likedPosts");
     List<String> dislikedPosts = updateData.get("dislikedPosts");
@@ -69,6 +75,33 @@ public class UserController {
     }
     if (dislikedPosts != null) {
       userServices.updateDislikedPosts(userId, dislikedPosts);
+    }
+
+    // Retorna o usuário atualizado
+    return ResponseEntity.ok(user);
+  }
+
+
+  // Endpoint para atualizar os likes e dislikes do usuário
+  @PatchMapping("/users/{userId}/complaints")
+  public ResponseEntity<User> updateUserLikesDislikesComplaints(@PathVariable String userId, @RequestBody Map<String, List<String>> updateData) {
+    User user = userRepository.findById(userId).orElse(null);
+    if (user == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    System.out.println(updateData);
+
+    List<String> likedComplaints = updateData.get("likedComplaints");
+    List<String> dislikedComplaints = updateData.get("dislikedComplaints");
+
+
+    // Atualiza as tabelas de relacionamento liked_posts e disliked_posts
+    if (likedComplaints != null) {
+      userServices.updateLikedComplaints(userId, likedComplaints);
+    }
+    if (dislikedComplaints != null) {
+      userServices.updateDislikedComplaints(userId, dislikedComplaints);
     }
 
     // Retorna o usuário atualizado

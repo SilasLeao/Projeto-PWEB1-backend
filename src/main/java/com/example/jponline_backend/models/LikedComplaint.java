@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "liked_posts")
-public class LikedPost {
+@Table(name = "liked_complaints")
+public class LikedComplaint {
 
     @Id
     private String id = UUID.randomUUID().toString();
@@ -13,10 +13,10 @@ public class LikedPost {
     private String userId;
     private String postId;
 
-    public LikedPost() {
+    public LikedComplaint() {
     }
 
-    public LikedPost(String userId, String postId) {
+    public LikedComplaint(String userId, String postId) {
         this.userId = userId;
         this.postId = postId;
     }

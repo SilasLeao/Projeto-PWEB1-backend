@@ -37,15 +37,34 @@ public class User {
   )
   private List<Post> dislikedPosts;
 
+
+  @ManyToMany
+  @JoinTable(
+          name = "liked_complaints",
+          joinColumns = @JoinColumn(name = "userId"),
+          inverseJoinColumns = @JoinColumn(name = "postId")
+  )
+  private List<Complaint> likedComplaints;
+
+  @ManyToMany
+  @JoinTable(
+          name = "disliked_complaints",
+          joinColumns = @JoinColumn(name = "userId"),
+          inverseJoinColumns = @JoinColumn(name = "postId")
+  )
+  private List<Complaint> dislikedComplaints;
+
   // Construtores
   public User() {}
 
-  public User(String username, String email, String password, List<Post> likedPosts, List<Post> dislikedPosts) {
+  public User(String username, String email, String password, List<Post> likedPosts, List<Post> dislikedPosts, List<Complaint> likedComplaints, List<Complaint> dislikedComplaints) {
     this.username = username;
     this.email = email;
     this.password = password;
     this.likedPosts = likedPosts;
     this.dislikedPosts = dislikedPosts;
+    this.likedComplaints = likedComplaints;
+    this.dislikedComplaints = dislikedComplaints;
   }
 
   // Getters e Setters
@@ -95,5 +114,21 @@ public class User {
 
   public void setDislikedPosts(List<Post> dislikedPosts) {
     this.dislikedPosts = dislikedPosts;
+  }
+
+  public List<Complaint> getLikedComplaints() {
+    return likedComplaints;
+  }
+
+  public void setLikedComplaints(List<Complaint> likedComplaints) {
+    this.likedComplaints = likedComplaints;
+  }
+
+  public List<Complaint> getDislikedComplaints() {
+    return dislikedComplaints;
+  }
+
+  public void setDislikedComplaints(List<Complaint> dislikedComplaints) {
+    this.dislikedComplaints = dislikedComplaints;
   }
 }

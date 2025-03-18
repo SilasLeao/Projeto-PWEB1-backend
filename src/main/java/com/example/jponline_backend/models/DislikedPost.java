@@ -38,4 +38,5 @@ public class DislikedPost {
     public void setPostId(String postId) {
         this.postId = postId;
     }
+
 }
