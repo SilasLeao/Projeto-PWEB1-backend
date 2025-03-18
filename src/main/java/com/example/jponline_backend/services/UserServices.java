@@ -54,30 +54,6 @@ public class UserServices {
     }
 
 
-
-    // Metodo para atualizar os likes e dislikes do usuário
-    public User updateUserLikesDislikes(String userId, String postId, boolean isLike) {
-        User user = userRepository.findById(userId).orElse(null);
-
-        if (user != null) {
-            if (isLike) {
-                // Verifica se o post não está na tabela de disliked posts, para evitar conflito
-                dislikedPostsRepository.deleteByUserIdAndPostId(userId, postId);
-
-                // Adiciona o post à tabela liked_posts
-                likedPostsRepository.save(new LikedPost(userId, postId));
-            } else {
-                // Verifica se o post não está na tabela de liked posts, para evitar conflito
-                likedPostsRepository.deleteByUserIdAndPostId(userId, postId);
-
-                // Adiciona o post à tabela disliked_posts
-                dislikedPostsRepository.save(new DislikedPost(userId, postId));
-            }
-            return user;
-        }
-        return null;
-    }
-
     @Transactional
     public void updateLikedPosts(String userId, List<String> likedPosts) {
         // Limpar likes anteriores
